@@ -2,17 +2,15 @@
 import requests
 import time
 import sys
-import timeout_decorator
 
-@timeout_decorator.timeout(30)
 def record(URL,f):
-    response = requests.get(URL)
+    response = requests.get(URL,timeout=30)
     # successfully responde
     if response:
         f.write(f'{int(time.time())},{response.status_code}\n')
     else:
         f.write(f'{int(time.time())},-1\n')
-    time.sleep(30)
+    time.sleep(2)
 
 def main():
     # ensure length of arguments
@@ -26,7 +24,7 @@ def main():
         while True:
             try:
                 record(URL,f)
-            except timeout_decorator.TimeoutError:
+            except TimeoutError:
                 continue
 
 main()
